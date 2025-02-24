@@ -11,6 +11,8 @@ if not cap.isOpened():
     print("Ошибка: Не удалось подключиться к камере")
     exit()
 
+n = 0
+
 try:
     while True:
         # Считываем кадр из потока
@@ -20,7 +22,11 @@ try:
             print("Ошибка: Не удалось получить кадр")
             break
 
-        frame = frame[86:873, 246:1033]
+        frame = frame[300:600, 350:950]
+
+        cap.set(cv2.CAP_PROP_POS_MSEC, 200)
+        cv2.imwrite(f'./images/frame{n}.png', frame)
+        n += 1
 
         # Отображаем кадр в окне
         cv2.imshow('IP Camera Stream', frame)
