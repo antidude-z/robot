@@ -61,8 +61,6 @@ try:
         frame = frame[300:600, 350:950]
         frame = cv2.undistort(frame, K, D, None, newcameramtx)
 
-        
-
         # Отображаем кадр в окне
         cv2.imshow('IP Camera Stream', frame)
 

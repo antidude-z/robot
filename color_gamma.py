@@ -1,10 +1,8 @@
 import cv2
-import numpy as np
 
-#cap = cv2.VideoCapture("C:/Users/admin/Desktop/Mash/robotCam_1.avi")
-#cap = cv2.VideoCapture(0)
 
 def nothing(args): pass
+
 
 cv2.namedWindow("setup")
 cv2.createTrackbar("b1", "setup", 0, 255, nothing)
@@ -17,9 +15,10 @@ cv2.createTrackbar("r2", "setup", 255, 255, nothing)
 fn = "spektor.png"
 img = cv2.imread(fn)
 
+# fn = cv2.VideoCapture(0)
 
 while True:
-    
+
     r1 = cv2.getTrackbarPos('r1', 'setup')
     g1 = cv2.getTrackbarPos('g1', 'setup')
     b1 = cv2.getTrackbarPos('b1', 'setup')
@@ -38,7 +37,7 @@ while True:
     cv2.imshow("result", result)
 
     if cv2.waitKey(33) & 0xFF == ord('q'):
-         break
+        break
 
 fn.release()
 cv2.destroyAllWindows()

@@ -1,12 +1,11 @@
 import cv2
-import numpy as np
+
 # RTSP-адрес камеры
 rtsp_url = "rtsp://admin:UrFU_ISIT@10.32.9.223:554/Streaming/channels/101"
 
 # Создаем объект для захвата видео
 cap = cv2.VideoCapture(rtsp_url)
 
-## Проверяем успешность подключения
 if not cap.isOpened():
     print("Ошибка: Не удалось подключиться к камере")
     exit()
@@ -15,7 +14,6 @@ n = 0
 
 try:
     while True:
-        # Считываем кадр из потока
         ret, frame = cap.read()
 
         if not ret:
