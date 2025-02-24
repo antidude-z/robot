@@ -14,7 +14,7 @@ cv2.createTrackbar("b2", "setup", 148, 255, nothing)
 cv2.createTrackbar("g2", "setup", 158, 255, nothing)
 cv2.createTrackbar("r2", "setup", 255, 255, nothing)
 
-fn = "theory/spektor.png"
+fn = "spektor.png"
 img = cv2.imread(fn)
 
 
