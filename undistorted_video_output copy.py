@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# RTSP-адрес камеры
+# RTSP-адрес
 rtsp_url = "rtsp://admin:UrFU_ISIT@10.32.9.223:554/Streaming/channels/101"
 
 # Создаем объект для захвата видео
