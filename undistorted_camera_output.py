@@ -7,40 +7,64 @@ rtsp_url = "rtsp://admin:UrFU_ISIT@10.32.9.223:554/Streaming/channels/101"
 # Создаем объект для захвата видео
 cap = cv2.VideoCapture(rtsp_url)
 
-# K = np.array([[627.46226877,   0.,         329.7297745 ],
-#  [  0.,         634.75994258, 426.07868156],
-#  [  0.,           0.,           1.        ]])
-# K = np.array([[606.68017771,   0.,         400.1477127 ],
-#  [  0.,         623.53977779, 395.21510025],
+cv2.namedWindow('settings', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('settings', 900, 500)
+
+def nothing(n: int) -> None:
+    pass
+
+def get_setting(field):
+    return cv2.getTrackbarPos(field, 'settings')
+
+
+def create_setting(name, value, count):
+    cv2.createTrackbar(name, 'settings', value, count, nothing)
+
+
+create_setting('a1', 0, 1000)
+create_setting('a2', 0, 1000)
+create_setting('a3', 0, 1000)
+create_setting('b1', 0, 1000)
+create_setting('b2', 0, 1000)
+create_setting('b3', 0, 1000)
+create_setting('c1', 0, 1000)
+create_setting('c2', 0, 1000)
+create_setting('c3', 0, 1000)
+
+create_setting('d1', -2.91550736e-01, 1000)
+create_setting('d2', 0, 1000)
+create_setting('d3', 0, 1000)
+create_setting('d4', 0, 1000)
+create_setting('d5', 0, 1000)
+
+
+# K = np.array([[279.32886439,   0.,         288.85532134],
+#  [  0.,         270.05932082, 182.29417195],
 #  [  0.,           0.,           1.        ]])  
-# K = np.array([[360.03353073,   0.,         411.47450711],
-#  [  0.,         350.97754646, 361.57433184],
-#  [  0.,           0.,           1.        ]])  
-# K = np.array([[1.15875462e+03, 0.00000000e+00, 3.91565460e+02],
-#  [0.00000000e+00, 1.12748536e+03, 3.98349397e+02],
-#  [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]])  
-# K = np.array([[495.00572315,   0.,         295.37470581],
-#  [  0.,         480.46583295, 166.39519288],
-#  [  0.,           0.,           1.,        ]])  
-K = np.array([[279.32886439,   0.,         288.85532134],
- [  0.,         270.05932082, 182.29417195],
- [  0.,           0.,           1.        ]])  
+# K = np.array([[540.58274027,   0.,         584.44069952],
+#  [  0.,         522.21403853, 243.33864001],
+#  [  0.,           0.,           1.        ]]) 
+# K = np.array([[524.86313844,   0.,         581.53887646],
+#  [  0.,         507.44567318, 259.14912353],
+#  [  0.,           0.,           1.        ]]) 
+K = np.array([[get_setting('a1'), get_setting('a2'), get_setting('a3')],
+              [get_setting('b1'), get_setting('b2'), get_setting('b3')],
+              [get_setting('c1'), get_setting('c2'), get_setting('c3')]])
 # Сама матрица параметров
 
-# D = np.array([-1.3100785,  -2.73062637, -0.06422096,  0.14167724,  9.88706302]) 
-# D = np.array([-1.49303132,  2.21038416, -0.00336617,  0.00384473, -1.45777788]) 
-# D = np.array([-0.50205798,  0.25191986,  0.02121489, -0.01023011, -0.0667614]) 
-# D = np.array([-5.48558181e+00,  3.20934950e+01,  6.14130914e-03, -1.16508948e-02, -8.53629154e+01]) 
-# D = np.array([-1.08905425,  1.46490697,  0.01505046, -0.01363791, -1.05467567]) 
-D = np.array([-0.31811907,  0.10801802, -0.00077353,  0.00141375, -0.01673607]) 
+# D = np.array([-0.31811907,  0.10801802, -0.00077353,  0.00141375, -0.01673607]) 
+# D = np.array([-0.33076381,  0.15602231,  0.00237734, -0.00139177, -0.04399833])
+# D = np.array([-2.91550736e-01,  1.06626079e-01, -1.89698359e-05,  7.24961162e-04,
+#  -2.10373121e-02])
+D = np.array([get_setting('d1') / 1000, get_setting('d2') / 1000, get_setting('d3') / 1000, get_setting('d4')/ 1000, get_setting('d5') / 1000])
 # Коэффициенты искажения (4 элемента) раньше было 5 но я убрал потому что были артефакты
 
 # size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
 #         int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-size = (600, 300)
+size = (450, 1150)
 
-newcameramtx, roi = cv2.getOptimalNewCameraMatrix(K, D, (size[0], size[1]), 1, (size[0], size[1]))
-x, y, w, h = roi
+# newcameramtx, roi = cv2.getOptimalNewCameraMatrix(K, D, (size[0], size[1]), 1, (size[0], size[1]))
+# x, y, w, h = roi
 # M = cv2.getRotationMatrix2D((size[0]/2,size[1]/2),5,1)
 
 
@@ -53,12 +77,15 @@ try:
         # Считываем кадр из потока
         ret, frame = cap.read()
 
+        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(K, D, (size[0], size[1]), 1, (size[0], size[1]))
+        x, y, w, h = roi
+
         if not ret:
             print("Ошибка: Не удалось получить кадр")
             break
 
         # frame = frame[y:y+h-50, x+70:x+w-20]
-        frame = frame[300:600, 350:950]
+        # frame = frame[700:1150, 700:1850]
         frame = cv2.undistort(frame, K, D, None, newcameramtx)
 
         # Отображаем кадр в окне

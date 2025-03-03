@@ -20,7 +20,7 @@ try:
             print("Ошибка: Не удалось получить кадр")
             break
 
-        frame = frame[300:600, 350:950]
+        frame = frame[700:1150, 700:1850]
 
         cap.set(cv2.CAP_PROP_POS_MSEC, 200)
         cv2.imwrite(f'./images/frame{n}.png', frame)
