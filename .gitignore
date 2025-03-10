@@ -1,4 +1,5 @@
 /venv
 /.idea
 /video
-/video_for_ai
+/images
+/dataset
