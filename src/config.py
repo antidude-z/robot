@@ -13,7 +13,7 @@ FPS: float = 1000  # Скорость обработки кадров (не вс
 # NORMALIZED_DIMENSIONS: после исправления дисторсии производится доп. обрезка
 # NORMALIZED_RESIZE_RATE: во сколько раз масштабировать результирующую картинку
 
-NORMALIZE_OUTPUT: bool = False
+NORMALIZE_OUTPUT: bool = True
 FISHEYE_DIMENSIONS: tuple = ((700, 1150), (700, 1850))
 NORMALIZED_DIMENSIONS: tuple = ((150, 350), (150, 850))
 NORMALIZED_RESIZE_RATE: float = 2
@@ -42,10 +42,10 @@ D_RANGE: int = 300
 # VIDEO_SOURCE_PATH: если InputSource.VIDEO, задаёт путь к видеофайлу
 # IMAGE_SOURCE_PATH: если InputSource.IMAGE, задаёт путь к одному кадру или каталогу с кадрами (glob support)
 
-INPUT_SOURCE: InputSource = InputSource.IMAGE
+INPUT_SOURCE: InputSource = InputSource.VIDEO
 
 RTSP_URL: str = "rtsp://admin:UrFU_ISIT@10.32.9.223:554/Streaming/channels/101"
-VIDEO_SOURCE_PATH: str = 'video/robotCam_tst.avi'
+VIDEO_SOURCE_PATH: str = 'video/robotCam_tst_video3.avi'
 IMAGE_SOURCE_PATH: str = 'images/*'
 
 # 5. Формат записи видеопотока.
@@ -56,7 +56,7 @@ IMAGE_SOURCE_PATH: str = 'images/*'
 # IMAGE_OUTPUT_PATH: путь к каталогу с кадрами.
 
 VIDEO_FILE_OUTPUT: bool = False
-VIDEO_OUTPUT_PATH: str = 'video/test.avi'
+VIDEO_OUTPUT_PATH: str = 'video/new_alg.mp4'
 
 IMAGE_FILE_OUTPUT: bool = False
 IMAGE_OUTPUT_PATH: str = 'dataset/'
@@ -69,9 +69,10 @@ IMAGE_OUTPUT_PATH: str = 'dataset/'
 # OBJECTS: словарь обнаруживаемых объектов
 
 DETECTION_DEMO: bool = False
-DETECTION_MODE: bool = False
+DETECTION_MODE: bool = True
 SHOW_CONTOURS: bool = False
 
-OBJECTS = {'red': DetectableObject(4, [0, 0, 88], [90, 90, 255], 5),
-           'green': DetectableObject(4, [0, 50, 0], [80, 255, 80], 5),
-           'blue': DetectableObject(4, [30, 0, 0], [255, 50, 50], 5)}
+OBJECTS = {'cone': DetectableObject(10, [0, 0, 88], [85, 65, 255], 10, area=1200),
+           # 'green': DetectableObject(4, [0, 50, 0], [80, 255, 80], 5),
+           'robot': DetectableObject(18, [10, 0, 0], [255, 118, 118], 12, area=1300,
+                                     single=True)}  # blur 15
