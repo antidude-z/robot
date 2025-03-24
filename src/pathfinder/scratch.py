@@ -66,7 +66,7 @@ class AStarPath:
                 y = self.calc_grid_position(idx_y, self.y_min)
                 for idx_x_obstacle, idx_y_obstacle in zip(x_obstacle, y_obstacle):
                     d = math.sqrt((idx_x_obstacle - x) ** 2 + (idx_y_obstacle - y) ** 2)
-                    if d <= self.robot_radius:
+                    if d <= self.robot_radius:  # <=
                         self.obstacle_pos[idx_x][idx_y] = True
                         break
 
@@ -148,16 +148,17 @@ class AStarPath:
         return x_out_path, y_out_path
 
 
-def main():
-    start_x = 43
-    start_y = 111
-    end_x = 156
-    end_y = 66
-    grid_size = 2.0
+def main(start_x=75, start_y=111, end_x=10, end_y=110, image=None):
+    # start_x = 75
+    # start_y = 111
+    # end_x = 10
+    # end_y = 100
+    grid_size = 8.0
     robot_radius = 2.0
 
-    image = cv2.imread('defisheyed.jpg')
-    image = cv2.resize(image, (200, 200))
+    if image is None:
+        image = cv2.imread('./src/pathfinder/defisheyed.jpg')
+        image = cv2.resize(image, (200, 200))
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     (width, length) = gray.shape
     x_obstacle, y_obstacle = [], []
@@ -176,6 +177,8 @@ def main():
 
     a_star = AStarPath(robot_radius, grid_size, x_obstacle, y_obstacle)
     x_out_path, y_out_path = a_star.a_star_search(start_x, start_y, end_x, end_y)
+
+    print(x_out_path, y_out_path)
 
     if show_animation:
         plt.plot(x_out_path, y_out_path, "r")

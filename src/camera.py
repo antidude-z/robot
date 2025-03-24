@@ -2,9 +2,10 @@ import cv2
 import glob
 
 from config import *
-from src.camera_tools import undistort, sliders
-from src.camera_tools.detector import DetectableObject
-from src.camera_tools.input_source import InputSource
+from camera_tools import undistort, sliders
+from camera_tools.detector import DetectableObject
+from camera_tools.input_source import InputSource
+from pathfinder import scratch
 
 LOWER_B_Y, UPPER_B_Y = NORMALIZED_DIMENSIONS[0][0], NORMALIZED_DIMENSIONS[0][1]
 LOWER_B_X, UPPER_B_X = NORMALIZED_DIMENSIONS[1][0], NORMALIZED_DIMENSIONS[1][1]
@@ -138,10 +139,14 @@ try:
                 frame = normalize(frame)
 
             if DETECTION_DEMO:
-                frame = demo_obj.proceed(frame, SHOW_CONTOURS)
+                frame = demo_obj.proceed(frame, SHOW_CONTOURS)[0]
             elif DETECTION_MODE:
                 for name, obj in OBJECTS.items():
-                    frame = obj.proceed(frame, SHOW_CONTOURS)
+                    frame, frame_dil, coords = obj.proceed(frame, SHOW_CONTOURS)
+
+                    if name == 'robot':
+                        scratch.main(coords[0][0] / 2, coords[0][1] / 2, 50, 100, cv2.resize(frame_dil, (UPPER_B_X - LOWER_B_X, UPPER_B_Y - LOWER_B_Y)))
+                        FPS = 0
 
             handle_output(frame)
 

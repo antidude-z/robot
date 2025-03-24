@@ -1,8 +1,8 @@
 """Файл конфигурации.
 Позволяет не трогать другой код в 90% случаев (до тех пор, пока не потребуется новая фича/скрипт).
 """
-from src.camera_tools.input_source import InputSource
-from src.camera_tools.detector import DetectableObject
+from camera_tools.input_source import InputSource
+from camera_tools.detector import DetectableObject
 
 FPS: float = 1000  # Скорость обработки кадров (не всегда точно соотв. значению)
 
@@ -42,9 +42,10 @@ D_RANGE: int = 300
 # VIDEO_SOURCE_PATH: если InputSource.VIDEO, задаёт путь к видеофайлу
 # IMAGE_SOURCE_PATH: если InputSource.IMAGE, задаёт путь к одному кадру или каталогу с кадрами (glob support)
 
-INPUT_SOURCE: InputSource = InputSource.VIDEO
+INPUT_SOURCE: InputSource = InputSource.REALTIME
 
 RTSP_URL: str = "rtsp://admin:UrFU_ISIT@10.32.9.223:554/Streaming/channels/101"
+# RTSP_URL: str = "http://192.168.1.1:8080/?action=stream"
 VIDEO_SOURCE_PATH: str = 'video/robotCam_tst_video3.avi'
 IMAGE_SOURCE_PATH: str = 'images/*'
 
@@ -56,7 +57,7 @@ IMAGE_SOURCE_PATH: str = 'images/*'
 # IMAGE_OUTPUT_PATH: путь к каталогу с кадрами.
 
 VIDEO_FILE_OUTPUT: bool = False
-VIDEO_OUTPUT_PATH: str = 'video/new_alg.mp4'
+VIDEO_OUTPUT_PATH: str = 'video/frontalka.mp4'
 
 IMAGE_FILE_OUTPUT: bool = False
 IMAGE_OUTPUT_PATH: str = 'dataset/'
@@ -72,7 +73,6 @@ DETECTION_DEMO: bool = False
 DETECTION_MODE: bool = True
 SHOW_CONTOURS: bool = False
 
-OBJECTS = {'cone': DetectableObject(10, [0, 0, 88], [85, 65, 255], 10, area=1200),
-           # 'green': DetectableObject(4, [0, 50, 0], [80, 255, 80], 5),
-           'robot': DetectableObject(18, [10, 0, 0], [255, 118, 118], 12, area=1300,
+OBJECTS = {'robot': DetectableObject(18, [20, 0, 0], [255, 140, 118], 12, area=1300,
                                      single=True)}  # blur 15
+# 'cone': DetectableObject(10, [0, 0, 88], [85, 65, 255], 10, area=1200)

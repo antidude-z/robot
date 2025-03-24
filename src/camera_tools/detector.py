@@ -30,6 +30,8 @@ class DetectableObject:
         contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
+        coords = []
+
         for i in range(len(contours)):
             if cv2.contourArea(contours[i]) < self.area:
                 continue
@@ -56,14 +58,20 @@ class DetectableObject:
                         self.avg_x.pop(0)
                         self.avg_y.pop(0)
 
-            frame = cv2.drawContours(frame, contours[i], -1, (0, 255, 0), 3)
+            frame = cv2.drawContours(frame, contours[i], -1, (0, 255, 0), thickness=3)
+
+            frame = cv2.fillPoly(frame, [contours[i]], color=(255, 255, 255))
+            kernel = np.ones((7, 7), np.uint8)
+            frame_dil = cv2.dilate(frame, kernel, iterations=1)
+
             cv2.putText(frame, f'{i}_({cx}:{cy})', (cx + 10, cy - 40), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (255, 255, 255), 1)
+            coords.append((cx, cy))
 
             if self.single:
                 break
 
         if show_contours:
-            return edged
+            return edged, coords
 
-        return frame
+        return frame, frame_dil, coords
