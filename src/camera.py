@@ -145,7 +145,7 @@ try:
                     frame, frame_dil, coords = obj.proceed(frame, SHOW_CONTOURS)
 
                     if name == 'robot':
-                        scratch.main(coords[0][0] / 2, coords[0][1] / 2, 50, 100, cv2.resize(frame_dil, (UPPER_B_X - LOWER_B_X, UPPER_B_Y - LOWER_B_Y)))
+                        scratch.main(coords[0][0] / 2, coords[0][1] / 2, 600, 100, cv2.resize(frame_dil, (UPPER_B_X - LOWER_B_X, UPPER_B_Y - LOWER_B_Y)))
                         FPS = 0
 
             handle_output(frame)

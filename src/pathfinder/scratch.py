@@ -1,10 +1,12 @@
 import cv2
 import math
 import matplotlib.pyplot as plt
+import numpy as np
+from pathfinder.robot import Robot
 
 show_animation = True
 
-
+SPEED = 7
 class AStarPath:
     def __init__(self, robot_radius, grid_size, x_obstacle, y_obstacle):
         self.grid_size = grid_size
@@ -154,7 +156,7 @@ def main(start_x=75, start_y=111, end_x=10, end_y=110, image=None):
     # end_x = 10
     # end_y = 100
     grid_size = 8.0
-    robot_radius = 2.0
+    robot_radius = 5.0
 
     if image is None:
         image = cv2.imread('./src/pathfinder/defisheyed.jpg')
@@ -178,7 +180,31 @@ def main(start_x=75, start_y=111, end_x=10, end_y=110, image=None):
     a_star = AStarPath(robot_radius, grid_size, x_obstacle, y_obstacle)
     x_out_path, y_out_path = a_star.a_star_search(start_x, start_y, end_x, end_y)
 
-    print(x_out_path, y_out_path)
+    x_out_path = x_out_path[::-1]
+    y_out_path = y_out_path[::-1]
+
+    # print(x_out_path, y_out_path)
+
+    # algorithm
+    vectors = []
+    for i in range(1, len(x_out_path)):
+        vec = np.array([x_out_path[i] - x_out_path[i - 1], y_out_path[i] - y_out_path[i - 1]])
+        vectors.append(vec)
+
+    vectors_opt = [vectors[0]]
+    for i in range(1, len(vectors)):
+        vec = vectors_opt[-1]
+        next_vec = vectors[i]
+
+        if round(np.dot(vec, next_vec), 2) == round(np.linalg.norm(vec) * np.linalg.norm(next_vec), 2) and (np.linalg.norm(vec + next_vec)) < 20:
+            vectors_opt[-1] += next_vec
+        else:
+            vectors_opt.append(next_vec.copy())
+
+    print(vectors_opt)
+
+    r = Robot([start_x, start_y])
+    r.move_by_path(vectors_opt)
 
     if show_animation:
         plt.plot(x_out_path, y_out_path, "r")
